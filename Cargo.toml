@@ -5,3 +5,4 @@ authors = ["Dominik Inführ <dominik.infuehr@gmail.com>"]
 
 [dependencies]
 chrono = "*"
+itertools = "*"
