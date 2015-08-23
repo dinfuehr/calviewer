@@ -78,6 +78,14 @@ def layout_months(year)
   year.map { |month| layout_month(month) }
 end
 
+def transpose_months(year)
+  year.map { |combined_months| combined_months.transpose }
+end
+
+def join_lines(year)
+  year.map { |combined_months| combined_months.map { |line| line.join } }
+end
+
 opts = Slop.parse do |o|
   o.integer '--months', '-m', 'number of columns', default: 3
   o.integer '--year', '-y', 'year', default: Date.today.year
@@ -90,13 +98,13 @@ if opts[:help]
   exit
 end
 
-year = dates(opts)
-year = by_months(year)
-year = month_by_weeks(year)
-year = layout_months(year)
-year = year.each_slice(opts[:months])
-year = year.map { |combined_months| combined_months.transpose }
-year = year.map { |combined_months| combined_months.map { |line| line.join } }
+year = dates(opts) # Iterator<Date>
+year = by_months(year) # Iterator<Iterator<Date>>
+year = month_by_weeks(year) # Iterator<Iterator<Iterator<Date>>>
+year = layout_months(year) # Iterator<Iterator<String>>
+year = year.each_slice(opts[:months]) # Iterator<(Iterator<String>, Iterator<String>, Iterator<String>)>
+year = transpose_months(year) # Iterator<(String,String,String)>
+year = join_lines(year) # Iterator<String>
 
 for line in year
   puts line
