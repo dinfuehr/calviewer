@@ -82,6 +82,12 @@ opts = Slop.parse do |o|
   o.integer '--months', '-m', 'number of columns', default: 3
   o.integer '--year', '-y', 'year', default: Date.today.year
   o.bool '--endless', '-e', 'endless output'
+  o.bool '--help', '-h', 'prints help'
+end
+
+if opts[:help]
+  puts opts
+  exit
 end
 
 year = dates(opts)
